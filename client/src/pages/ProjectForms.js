@@ -4,19 +4,34 @@ import axios from 'axios';
 const ProjectForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/projects', { title, description });
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('image', image);
+
+      const response = await axios.post('http://localhost:3000/api/projects', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       console.log('Project added successfully:', response.data);
 
-      // Redirect to the homepage
-      window.location.href = '/'; // or any other route you want
+      window.location.href = '/'; 
     } catch (error) {
       console.error('Error adding project:', error);
     }
+  };
+
+  const handleImageChange = (e) => {
+    // Assuming you want to handle a single file upload
+    setImage(e.target.files[0]);
   };
 
   return (
@@ -28,6 +43,9 @@ const ProjectForm = () => {
 
         <label>Description:</label>
         <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
+
+        <label>Image:</label>
+        <input type="file" accept="image/*" onChange={handleImageChange} />
 
         <button type="submit">Add Project</button>
       </form>

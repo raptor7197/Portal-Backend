@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const Project = require('../models/projectModels');
 
+const storage = multer.memoryStorage(); 
+const upload = multer({ storage: storage });
+
+// Get all projects
 router.get('/projects', async (req, res) => {
   try {
     const projects = await Project.find();
@@ -11,30 +16,25 @@ router.get('/projects', async (req, res) => {
   }
 });
 
-// Add a new project
-router.post('/projects', async (req, res) => {
-  const project = new Project({
-    title: req.body.title,
-    description: req.body.description,
-    // Add more fields as needed
-  });
+// Add a new project with image
+router.post('/projects', upload.single('image'), async (req, res) => {
+  const { title, description } = req.body;
 
-  try {
-    const newProject = await project.save();
-    res.status(201).json(newProject);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+  if (!title || !description) {
+    return res.status(400).json({ message: 'Title and description are required' });
   }
-});
-
-router.post('/projects', async (req, res) => {
-  const project = new Project({
-    title: req.body.title,
-    description: req.body.description,
-    // Add more fields as needed
-  });
 
   try {
+    const imageBuffer = req.file.buffer;
+
+    const base64Image = imageBuffer.toString('base64');
+
+    const project = new Project({
+      title,
+      description,
+      image: base64Image,
+    });
+
     const newProject = await project.save();
     res.status(201).json(newProject);
   } catch (error) {
@@ -45,7 +45,6 @@ router.post('/projects', async (req, res) => {
 router.patch('/projects/:id', async (req, res) => {
   // Implement update logic here
 });
-
 
 router.delete('/projects/:id', async (req, res) => {
   const projectId = req.params.id;
