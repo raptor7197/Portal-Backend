@@ -1,3 +1,4 @@
+import '../App.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -30,17 +31,23 @@ const ProjectList = () => {
 
   return (
     <div>
-      <h2>Projects</h2>
+      <h2 className='text-3xl font-bold underline'>Projects</h2>
       <ul>
         {projects.map(project => (
           <li key={project._id}>
             <strong>{project.title}</strong>
             <p>{project.description}</p>
-            <button onClick={() => handleDelete(project._id)}>Delete</button>
+            {project.image && (
+              <img className='w-25 h-20'
+                src={`data:image/jpeg;base64,${project.image}`}
+                alt={`Project: ${project.title}`}
+              />
+            )}
+            <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={() => handleDelete(project._id)}>Delete</button>
           </li>
         ))}
       </ul>
-      <a href="/add">Add Project</a>
+      <a className="m-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500  rounded " href="/add">Add Project</a>
     </div>
   );
 };
