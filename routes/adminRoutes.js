@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Project = require('../models/projectModels');
+const { ObjectId } = require('mongodb');
 
 const storage = multer.memoryStorage(); 
 const upload = multer({ storage: storage });
 
-// Get all projects
 router.get('/projects', async (req, res) => {
   try {
     const projects = await Project.find();
@@ -16,7 +16,24 @@ router.get('/projects', async (req, res) => {
   }
 });
 
-// Add a new project with image
+
+router.get('/projects/:id', async (req, res) => {
+  const projectId = req.params.id;
+
+  try {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 router.post('/projects', upload.single('image'), async (req, res) => {
   const { title, description } = req.body;
 
@@ -42,8 +59,41 @@ router.post('/projects', upload.single('image'), async (req, res) => {
   }
 });
 
-router.patch('/projects/:id', async (req, res) => {
-  // Implement update logic here
+router.patch('/projects/:id', upload.single('image'), async (req, res) => {
+  const projectId = req.params.id;
+  const { title, description } = req.body;
+
+  try {
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    // Update text data
+    if (title) {
+      project.title = title;
+    }
+
+    if (description) {
+      project.description = description;
+    }
+
+    // Update image data if a new image is provided
+    if (req.file) {
+      const newImageBuffer = req.file.buffer;
+      const base64Image = newImageBuffer.toString('base64');
+      project.image = base64Image;
+    }
+
+    // Save the updated project
+    const updatedProject = await project.save();
+
+    res.json(updatedProject);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
 router.delete('/projects/:id', async (req, res) => {

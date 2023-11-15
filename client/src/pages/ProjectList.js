@@ -1,6 +1,6 @@
-import '../App.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Assuming you're using React Router
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
@@ -44,10 +44,13 @@ const ProjectList = () => {
               />
             )}
             <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={() => handleDelete(project._id)}>Delete</button>
+            <Link to={`/projects/${project._id}`}>
+              <button className="bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 border-b-4 border-yellow-700 hover:border-yellow-500 rounded">Edit</button>
+            </Link>
           </li>
         ))}
       </ul>
-      <a className="m-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500  rounded " href="/add">Add Project</a>
+      <Link to="/add" className="m-40 bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded">Add Project</Link>
     </div>
   );
 };
