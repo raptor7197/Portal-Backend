@@ -9,7 +9,6 @@ const UpdateProjectForm = () => {
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    // Fetch the project details by ID when the component mounts
     const fetchProjectDetails = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/projects/${id}`);
@@ -24,14 +23,16 @@ const UpdateProjectForm = () => {
     fetchProjectDetails();
   }, [id]);
 
- const handleUpdate = async () => {
+  const handleUpdate = async () => {
     try {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
-      
-      // Append the first image to the formData
-      formData.append('image', images[0]);
+
+      // Append each image to the formData under 'images' field
+      images.forEach((image, index) => {
+        formData.append('images', image);
+      });
 
       const response = await axios.patch(`http://localhost:3000/api/projects/${id}`, formData, {
         headers: {
@@ -40,15 +41,15 @@ const UpdateProjectForm = () => {
       });
 
       console.log('Project updated successfully:', response.data);
-      window.location.href = '/';
+      window.location.href = '/admin';
     } catch (error) {
       console.error('Error updating project:', error);
     }
   };
 
   const handleImageChange = (e) => {
-    // Store only the first selected file in the images state array
-    setImages([e.target.files[0]]);
+    // Store all selected files in the images state array
+    setImages([...e.target.files]);
   };
 
   return (
@@ -60,10 +61,10 @@ const UpdateProjectForm = () => {
       <label>Description:</label>
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
 
-      <label>New Image:</label>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <label>New Images:</label>
+      <input type="file" accept="image/*" multiple onChange={handleImageChange} />
 
-      <button onClick={handleUpdate}>Update Project</button>
+      <button type="button" onClick={handleUpdate}>Update Project</button>
     </div>
   );
 };

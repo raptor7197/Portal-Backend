@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom'; // Assuming you're using React Router
+import { Link } from 'react-router-dom';
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
@@ -22,7 +22,7 @@ const ProjectList = () => {
   const handleDelete = (projectId) => {
     axios.delete(`http://localhost:3000/api/projects/${projectId}`)
       .then(() => {
-        fetchProjects(); // Refresh the project list after deletion
+        fetchProjects();
       })
       .catch(error => {
         console.error('Error deleting project:', error);
@@ -37,11 +37,17 @@ const ProjectList = () => {
           <li key={project._id}>
             <strong>{project.title}</strong>
             <p>{project.description}</p>
-            {project.image && (
-              <img className='w-25 h-20'
-                src={`data:image/jpeg;base64,${project.image}`}
-                alt={`Project: ${project.title}`}
-              />
+            {project.images && (
+              <div>
+                {project.images.map((image, index) => (
+                  <img
+                    key={index}
+                    className='w-25 h-20'
+                    src={`data:image/jpeg;base64,${image}`}
+                    alt={`Project: ${project.title} - pic ${index + 1}`}
+                  />
+                ))}
+              </div>
             )}
             <button className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" onClick={() => handleDelete(project._id)}>Delete</button>
             <Link to={`/projects/${project._id}`}>
