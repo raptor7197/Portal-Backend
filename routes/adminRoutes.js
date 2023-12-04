@@ -2,9 +2,33 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Project = require('../models/projectModels');
+const passport  = require('passport');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
+require('dotenv').config();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ id: user._id, username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+
+  }
+});
 
 
 router.get('/projects', async (req, res) => {
@@ -32,13 +56,13 @@ router.get('/projects/:id', async (req, res) => {
   }
 });
 
-router.post('/projects', upload.array('images'), async (req, res) => {
+router.post('/projects',passport.authenticate('jwt', { session: false }), upload.array('images'), async (req, res) => {
   const { title, description } = req.body;
 
   if (!title || !description) {
     return res.status(400).json({ message: 'Title and description are required' });
   }
-
+  
   try {
     console.log('Before creating project...');
     const images = req.files.map(file => {
@@ -64,7 +88,7 @@ router.post('/projects', upload.array('images'), async (req, res) => {
 });
 
 
-router.patch('/projects/:id', upload.array('images'), async (req, res) => {
+router.patch('/projects/:id',passport.authenticate('jwt', { session: false }) ,upload.array('images'), async (req, res) => {
   const projectId = req.params.id;
   const { title, description } = req.body;
 
@@ -103,7 +127,7 @@ router.patch('/projects/:id', upload.array('images'), async (req, res) => {
   }
 });
 
-router.delete('/projects/:id', async (req, res) => {
+router.delete('/projects/:id',passport.authenticate('jwt', { session: false }), async (req, res) => {
   const projectId = req.params.id;
 
   try {
