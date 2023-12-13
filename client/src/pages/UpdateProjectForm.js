@@ -1,12 +1,15 @@
 import axios from '../configuredAxios';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import NavBar from '../components/NavBar';
 
 const UpdateProjectForm = () => {
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [githublink, setGithublink] = useState('');
   const [images, setImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     const fetchProjectDetails = async () => {
@@ -15,6 +18,7 @@ const UpdateProjectForm = () => {
         const project = response.data;
         setTitle(project.title);
         setDescription(project.description);
+        setGithublink(project.githublink);
       } catch (error) {
         console.error('Error fetching project details:', error);
       }
@@ -28,6 +32,7 @@ const UpdateProjectForm = () => {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
+      formData.append('githublink', githublink);
 
       // Append each image to the formData under 'images' field
       images.forEach((image, index) => {
@@ -48,24 +53,45 @@ const UpdateProjectForm = () => {
   };
 
   const handleImageChange = (e) => {
-    // Store all selected files in the images state array
-    setImages([...e.target.files]);
+    const selectedImages = Array.from(e.target.files);
+    setImages(selectedImages);
+
+    // Create image preview URLs
+    const imagePreviews = selectedImages.map((image) => URL.createObjectURL(image));
+    setImagePreviews(imagePreviews);
   };
 
   return (
-    <div>
-      <h2>Update Project</h2>
-      <label>Title:</label>
-      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+    <>
+      <div>
+        <NavBar />
+      </div>
+      <div className="mt-10 max-w-md mx-auto bg-white rounded-md shadow-md p-6">
+        <h2 className="text-2xl font-bold mb-4 text-black">Update Project</h2>
+        <label className="block mb-2  text-black">Title:</label>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="border border-gray-300 rounded-md p-2 mb-4 w-full text-white" />
 
-      <label>Description:</label>
-      <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+        <label className="block mb-2  text-black">Description:</label>
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="border border-gray-300 rounded-md p-2 mb-4 w-full text-white" />
 
-      <label>New Images:</label>
-      <input type="file" accept="image/*" multiple onChange={handleImageChange} />
+        <label className="block mb-2  text-black">Github Link:</label>
+        <input type="text" value={githublink} onChange={(e) => setGithublink(e.target.value)} className="border border-gray-300 rounded-md p-2 mb-4 w-full text-white" />
 
-      <button type="button" onClick={handleUpdate}>Update Project</button>
-    </div>
+        <label className="block mb-2  text-black">New Images:</label>
+        <input type="file" accept="image/*" multiple onChange={handleImageChange} className="mb-4" />
+
+        {/* Display image previews */}
+        <div className="flex flex-wrap">
+          {imagePreviews.map((preview, index) => (
+            <img key={index} src={preview} alt={`Preview ${index}`} className="max-w-xs max-h-xs m-2" />
+          ))}
+        </div>
+
+        <button type="button" onClick={handleUpdate} className="bg-black hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md">
+          Update Project
+        </button>
+      </div>
+    </>
   );
 };
 
