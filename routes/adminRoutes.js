@@ -57,9 +57,9 @@ router.get('/projects/:id', async (req, res) => {
 });
 
 router.post('/projects',passport.authenticate('jwt', { session: false }), upload.array('images'), async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description,githublink } = req.body;
 
-  if (!title || !description) {
+  if (!title || !description || !githublink) {
     return res.status(400).json({ message: 'Title and description are required' });
   }
   
@@ -74,6 +74,7 @@ router.post('/projects',passport.authenticate('jwt', { session: false }), upload
       title,
       description,
       images,
+      githublink
     });
 
     console.log('Before saving project...');
@@ -90,7 +91,7 @@ router.post('/projects',passport.authenticate('jwt', { session: false }), upload
 
 router.patch('/projects/:id',passport.authenticate('jwt', { session: false }) ,upload.array('images'), async (req, res) => {
   const projectId = req.params.id;
-  const { title, description } = req.body;
+  const { title, description,githublink} = req.body;
 
   try {
     const project = await Project.findById(projectId);
@@ -106,6 +107,10 @@ router.patch('/projects/:id',passport.authenticate('jwt', { session: false }) ,u
 
     if (description) {
       project.description = description;
+    }
+
+    if(githublink){
+      project.githublink = githublink;
     }
 
     // Update image data if new images are provided
