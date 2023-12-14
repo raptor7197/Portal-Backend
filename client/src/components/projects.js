@@ -43,13 +43,13 @@ const Projects = () => {
       {projects.map((project, index) => (
         <div key={index} data-aos={getRandomAosEffect()} className="max-w-xs rounded bg-white shadow-blue-900 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 m-3 ">
           <div className="h-full overflow-hidden m-0">
-            <div className="carousel border-blue-950 border-4 border-b-8" data-autoplay="true">
+            <div className="carousel carousel-vertical border-blue-950 border-4 h-64 rounded-box" data-autoplay="true">
               {project.images.map((image, imgIndex) => (
-                <div key={imgIndex} className="carousel-item w-full">
+                <div key={imgIndex} className="carousel-item h-full">
                   <img
                     src={`data:image/jpeg;base64,${image}`}
                     alt={`Project ${index}`}
-                    className="w-full h-full object-cover object-center"
+                    className="h-full w-full object-cover object-center"
                   />
                 </div>
               ))}
@@ -72,7 +72,6 @@ const Projects = () => {
               <FaGithub className="inline align-middle mb-1" />
             </a>
           </div>
-          {/* Modal for each project */}
           <dialog id={`modal_${index}`} className="modal">
             <div className="modal-box border-blue-900 border-4">
               <h3 className="font-bold text-lg">{project.title}</h3>

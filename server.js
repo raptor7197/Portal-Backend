@@ -2,9 +2,10 @@ const app = require('./middleware/adminMiddleware');
 const mongoose = require('mongoose');
 const projectRoutes = require('./routes/adminRoutes');
 const auth = require('./routes/auth');
+require('dotenv').config();
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://alirashid:i4SG57W4jWqVZgTZ@test-db.nasboea.mongodb.net/?retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGODB_URI)
 
 // Use project routes
 app.use('/api', projectRoutes);
