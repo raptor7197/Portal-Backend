@@ -7,7 +7,6 @@ const footer = () => {
         <footer className="element footer p-10 bg-neutral text-neutral-content" id="footer" data-theme="night" >
   <aside>
     <img src={iste} className="rounded-full h-20 w-20" />
-    <p>ACME Industries Ltd.<br/>Providing reliable tech since 1992</p>
   </aside> 
   <nav>
     <header className="footer-title">Social</header> 

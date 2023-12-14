@@ -10,7 +10,7 @@ import Login from './pages/login';
 const App = () => {
   useEffect(() => {
     let idleTimer;
-    const IDLE_TIMEOUT = 15 * 60 * 1000; // 5 minutes in milliseconds
+    const IDLE_TIMEOUT = 1 * 60 * 1000; // 5 minutes in milliseconds
 
     const resetIdleTimer = () => {
       clearTimeout(idleTimer);
