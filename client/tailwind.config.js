@@ -9,7 +9,7 @@ module.exports = {
   plugins: [require("daisyui"), 
   ],
   daisyui: {
-    themes: ["light", "dark", "cupcake","aqua","retro","nord","coffee","night"],
+    themes: ["dark", "light", "cupcake", "bumblebee", "emerald", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel"],
     darkTheme: "dark", // name of one of the included themes for dark mode
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components

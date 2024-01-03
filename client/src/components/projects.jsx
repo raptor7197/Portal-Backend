@@ -39,7 +39,7 @@ const Projects = () => {
   };
 
   return (
-    <div data-theme="nord" className="flex flex-wrap gap-20 hero min-h-screen bg-base-200 flex-rows justify-center items-center" id='projects'>
+    <div data-theme="cupcake" className="flex flex-wrap gap-20 hero min-h-screen bg-base-200 flex-rows justify-center items-center" id='projects'>
       {projects.map((project, index) => (
         <div key={index} data-aos={getRandomAosEffect()} className="max-w-xs rounded bg-white shadow-blue-900 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 m-3 ">
           <div className="h-full overflow-hidden m-0">

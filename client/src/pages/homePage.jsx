@@ -1,13 +1,15 @@
 import React from 'react';
-import Header from '../components/header.js'; 
-import Footer from '../components/footer.js';
-import Projects from '../components/projects.js';
+import Header from '../components/header'; 
+import Footer from '../components/footer';
+import Projects from '../components/projects';
+import BentoBox from '../components/bentoxbox';
+
 function Home() {
   return (
     <div className="App">
       <header className="App-header">
         <Header /> {/* Render the Home component */}
-        <Projects /> {/* Render the projects component */}
+        <BentoBox /> {/* Render the bento box component */}
         <Footer /> {/* Render the footer component */}
       </header>
     </div>
