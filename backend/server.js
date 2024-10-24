@@ -1,11 +1,14 @@
 const app = require('./middleware/adminMiddleware');
 const mongoose = require('mongoose');
+const cors = require('cors')
 const projectRoutes = require('./routes/adminRoutes');
 const auth = require('./routes/auth');
 require('dotenv').config();
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
+
+app.use(cors())
 
 // Use project routes
 app.use('/api', projectRoutes);
