@@ -2,7 +2,7 @@
 
 ## Authentication
 
-### POST /login
+### POST api/login
 
 - **Description**: Authenticate the user and generate a JWT token.
 - **Request Body**: 
@@ -18,7 +18,7 @@
   - `404 Not Found`: User not found.
   - `500 Internal Server Error`: Server error.
 
-### POST /logout
+### POST api/logout
 
 - **Description**: Log the user out by clearing the JWT cookie.
 - **Responses**:
@@ -26,14 +26,14 @@
 
 ## Projects
 
-### GET /projects
+### GET api/projects
 
 - **Description**: Retrieve a list of all projects.
 - **Responses**:
   - `200 OK`: Returns an array of project objects.
   - `500 Internal Server Error`: Server error.
 
-### GET /projects/:id
+### GET api/projects/:id
 
 - **Description**: Retrieve a project by its ID.
 - **Parameters**:
@@ -43,7 +43,7 @@
   - `404 Not Found`: Project not found.
   - `500 Internal Server Error`: Server error.
 
-### POST /projects
+### POST api/projects
 
 - **Description**: Create a new project. Requires authentication.
 - **Headers**:
@@ -63,7 +63,7 @@
   - `400 Bad Request`: Missing required fields.
   - `500 Internal Server Error`: Server error.
 
-### PATCH /projects/:id
+### PATCH api/projects/:id
 
 - **Description**: Update an existing project. Requires authentication.
 - **Headers**:
@@ -85,7 +85,7 @@
   - `404 Not Found`: Project not found.
   - `500 Internal Server Error`: Server error.
 
-### DELETE /projects/:id
+### DELETE api/projects/:id
 
 - **Description**: Delete a project by its ID. Requires authentication.
 - **Headers**:
