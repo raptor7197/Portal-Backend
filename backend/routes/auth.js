@@ -19,4 +19,9 @@ router.post('/checkToken', (req, res) => {
  });
 });
 
+
+router.get('/',(req,res)=>{
+  res.json("Server Running !")
+})
+
 module.exports = router;

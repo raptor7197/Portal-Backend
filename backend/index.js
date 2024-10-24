@@ -13,6 +13,9 @@ app.use(cors())
 // Use project routes
 app.use('/api', projectRoutes);
 app.use('/',auth);
+
+
+
 /*
 const crypto = require('crypto');
 
